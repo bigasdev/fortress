@@ -1,9 +1,9 @@
 #include "Renderer.hpp"
+#include "../core/Engine.hpp"
 #include "../core/global.hpp"
+#include "../renderer/Sprite.hpp"
 #include "../res/Res.hpp"
 #include "../tools/Logger.hpp"
-#include  "../core/Engine.hpp"
-#include "../renderer/Sprite.hpp"
 #include "Camera.hpp"
 #include "SDL_gpu.h"
 
@@ -32,8 +32,8 @@ void Renderer::draw_line(Line line, Col color) {
   m_calls++;
 }
 
-void Renderer::draw_text(vec2 pos, const char *text, TTF_Font *font,
-                         Col color, int size, int width) {
+void Renderer::draw_text(vec2 pos, const char *text, TTF_Font *font, Col color,
+                         int size, int width) {
   SDL_Surface *surfaceMessage = TTF_RenderText_Blended_Wrapped(
       font, text, {color.r, color.g, color.b, color.a}, width);
   GPU_Image *message = GPU_CopyImageFromSurface(surfaceMessage);
@@ -76,12 +76,12 @@ void Renderer::draw_from_sheet(GPU_Image *sheet, vec2 pos, Rect l_point,
     auto program = g_res->get_shader_id();
     GPU_ShaderBlock block = g_res->get_shader_block();
     GPU_ActivateShaderProgram(program, &block);
-    //auto col = g_res->get_color_primitive(2);
-    GPU_SetUniformf(GPU_GetUniformLocation(program,"r") , 1.0);
-    GPU_SetUniformf(GPU_GetUniformLocation(program,"g") , 0.0);
-    GPU_SetUniformf(GPU_GetUniformLocation(program,"b") , 0.0);
-    GPU_SetUniformf(GPU_GetUniformLocation(program,"width") , sheet->w);
-    GPU_SetUniformf(GPU_GetUniformLocation(program,"height") , sheet->h);
+    // auto col = g_res->get_color_primitive(2);
+    GPU_SetUniformf(GPU_GetUniformLocation(program, "r"), 1.0);
+    GPU_SetUniformf(GPU_GetUniformLocation(program, "g"), 0.0);
+    GPU_SetUniformf(GPU_GetUniformLocation(program, "b"), 0.0);
+    GPU_SetUniformf(GPU_GetUniformLocation(program, "width"), sheet->w);
+    GPU_SetUniformf(GPU_GetUniformLocation(program, "height"), sheet->h);
   }
 
   GPU_BlitRectX(sheet, &src, m_gpu, &dst, 0, 0, 0, GPU_FLIP_NONE);
@@ -91,9 +91,11 @@ void Renderer::draw_from_sheet(GPU_Image *sheet, vec2 pos, Rect l_point,
   GPU_DeactivateShaderProgram();
 }
 
-//draw of a sprite, this is the same as for drawing an entity but it can be used standalone
+// draw of a sprite, this is the same as for drawing an entity but it can be
+// used standalone
 void Renderer::draw(GPU_Image *sheet, Sprite spr, vec2 pos) {
-  if(!spr.visible) return;
+  if (!spr.visible)
+    return;
 
   GPU_Rect src;
   src.x = spr.dst_x * spr.wid;
@@ -102,15 +104,19 @@ void Renderer::draw(GPU_Image *sheet, Sprite spr, vec2 pos) {
   src.h = spr.hei;
 
   GPU_Rect dst;
-  dst.x = static_cast<int>(pos.x + (spr.spr_x*g_camera->get_game_scale()));
-  dst.y = static_cast<int>(pos.y + (spr.spr_y*g_camera->get_game_scale()));
-  //this works??
+  dst.x = static_cast<int>(pos.x + (spr.spr_x * g_camera->get_game_scale()));
+  dst.y = static_cast<int>(pos.y + (spr.spr_y * g_camera->get_game_scale()));
+  // this works??
   dst.w = spr.wid * g_camera->get_game_scale() * spr.scale_x * spr.squash_x;
   dst.h = spr.hei * g_camera->get_game_scale() * spr.scale_y * spr.squash_y;
 
+  Logger::log("Drawing sprite: " + spr.sheet +
+              " at pos: " + std::to_string(dst.x) + ", " +
+              std::to_string(dst.y) + " with size: " + std::to_string(dst.w) +
+              ", " + std::to_string(dst.h));
+
   GPU_FlipEnum flip = spr.dir == -1 ? GPU_FLIP_HORIZONTAL : GPU_FLIP_NONE;
 
-  GPU_BlitRectX(sheet, &src, m_gpu, &dst, spr.angle, 0,
-                0, flip);
+  GPU_BlitRectX(sheet, &src, m_gpu, &dst, spr.angle, 0, 0, flip);
   m_calls++;
 }

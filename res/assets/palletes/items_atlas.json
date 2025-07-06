@@ -1,0 +1,15 @@
+{
+    "data": {
+        "Health_Potion": "x: 22;y: -1;w: 9;h: 9;",
+        "aseprite_file": "items_atlas",
+        "aseprite_path": "C:\\Users\\gusta\\.code\\rog\\res\\items_atlas.aseprite",
+        "h": "0",
+        "name": "none",
+        "w": "0",
+        "x": "0",
+        "y": "0"
+    },
+    "file_name": "items_atlas",
+    "is_favorite": false,
+    "is_static": true
+}

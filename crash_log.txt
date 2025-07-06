@@ -10,8 +10,20 @@ Loading font: 6px
 Loaded font: res/font\6px.ttf
 Loading font: arial
 Loaded font: res/font\arial.TTF
+Loading font: blueterm
+Loaded font: res/font\blueterm.ttf
 Loading font: code8
 Loaded font: res/font\code8.ttf
+Loading font: fusion10
+Loaded font: res/font\fusion10.ttf
+Loading font: fusion8px
+Loaded font: res/font\fusion8px.ttf
+Loading font: gohu11
+Loaded font: res/font\gohu11.ttf
+Loading font: gohufont-11
+Loaded font: res/font\gohufont-11.ttf
+Loading font: gohufont-14
+Loaded font: res/font\gohufont-14.ttf
 Loading font: jetbrains
 Loaded font: res/font\jetbrains.ttf
 Loading font: Licence
@@ -44,19 +56,4 @@ Finished aseprite load!
 ------------
 Aseprite: character_atlas
 Aseprite: items_atlas
-Loading animation file: animations
-ERROR: Failed to load animation: res/animations\animations.json [json.exception.type_error.302] type must be array, but is null
-ERROR: Failed to load animation: res/animations\animations.json [json.exception.type_error.302] type must be array, but is null
-Loading prefab: map
-Prefab loaded: bigas
-Prefab loaded: health_potion
-Loaded shader: res/shaders/light_vertex.glsl and res/shaders/newoutline.frag.glsl
-Game:3
-3
-Component name: TransformComponent
-Component name: SpriteComponent
-Component name: PlayerMoveComponent
-Game initialized
-Engine post init
-PlayerMoveSystem::update 
-ERROR: Signal: 11
+ERROR: Signal: 22

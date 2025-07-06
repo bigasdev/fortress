@@ -1,0 +1,11 @@
+{
+    "children": {
+        "SpriteComponent": {
+            "name": "SpriteComponent",
+            "type": "component"
+        }
+    },
+    "file_name": "New Prefab_0",
+    "is_favorite": false,
+    "is_static": false
+}

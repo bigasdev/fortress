@@ -1,0 +1,19 @@
+{
+    "data": {
+        "Bigas": "x: 0;y: 0;w: 11;h: 11;",
+        "Cube": "name: Cube x: 38 y: 9 w: 8\nh: 8",
+        "Sword": "name: Sword x: 50 y: 118 w: 6\nh: 9",
+        "aseprite_file": "character_atlas",
+        "aseprite_path": "C:\\Users\\gusta\\.code\\rog\\res\\character_atlas.aseprite",
+        "cube": "name: cube;x: 35;y: 5;w: 9;h: 8;",
+        "h": "10",
+        "name": "Test",
+        "sword": "name: sword;x: 0;y: 116;w: 7;h: 10;",
+        "w": "6",
+        "x": "-70",
+        "y": "16"
+    },
+    "file_name": "character_atlas",
+    "is_favorite": false,
+    "is_static": true
+}

@@ -6,11 +6,11 @@
 #include "../core/Engine.hpp"
 #include "../core/SoundManager.hpp"
 #include "../core/global.hpp"
+#include "../renderer/Sprite.hpp"
 #include "../tools/Reader.hpp"
 #include "Res.hpp"
 #include "SDL_render.h"
 #include "cute_aseprite.h"
-#include "../renderer/Sprite.hpp"
 #include "json.hpp"
 
 #include "../tools/Logger.hpp"
@@ -66,8 +66,7 @@ void Res::init() {
   load_sounds();
   load_aseprites();
   load_animations();
-  load_prefabs();
-  // load_pallete();
+  load_sprites();
   load_shaders();
 }
 
@@ -168,6 +167,52 @@ void Res::load_aseprites() {
   }
 }
 
+void Res::load_sprites() {
+  auto files = Reader::get_extension_files("res/sprites", ".json");
+
+  for (auto file : files) {
+    std::string path = file;
+    std::string file_name = path.substr(path.find_last_of("/\\") + 1);
+    file_name = file_name.substr(0, file_name.find_last_of("."));
+    Logger::log("Loading sprite: " + file_name);
+
+    std::string json = Reader::get_file_contents(file);
+    if (json.empty()) {
+      Logger::error("Failed to read prefab: " + file);
+      continue;
+    }
+
+    auto prefab = nlohmann::json::parse(json);
+
+    // loop through all the keys in the json array
+    // get all of the values from the json and try to create an Sprite from it
+    for (auto &[key, value] : prefab.items()) {
+      try {
+        auto name = value["name"].get<std::string>();
+        auto dst_x = value["x"].get<float>();
+        auto dst_y = value["y"].get<float>();
+        auto wid = value["width"].get<int>();
+        auto hei = value["height"].get<int>();
+        auto palette_name = value["palette"].get<std::string>();
+
+        auto spr = Sprite();
+        spr.sheet = palette_name;
+        spr.dst_x = dst_x;
+        spr.dst_y = dst_y;
+        spr.wid = wid;
+        spr.hei = hei;
+
+        m_sprites.insert(std::make_pair(name, spr));
+
+        Logger::log("Sprite loaded: " + name);
+      } catch (nlohmann::json::exception &e) {
+        Logger::error("Failed to load sprite: " + file + " " + e.what());
+      }
+    }
+    // m_prefabs.insert(std::make_pair(file_name, file));
+  }
+}
+
 // FIX: To my older self..
 //  this shader part needs to be rewritten to easily load more shaders, for now
 //  its hard Loading remember for every frag we need a vert (and we can change
@@ -254,100 +299,7 @@ void Res::load_shaders() {
   }*/
 }
 
-// loads all the .jsons file in the prefabs folder, the jsons are edited in the
-// rog-editor
-void Res::load_prefabs() {
-  auto files = Reader::get_extension_files("res/prefabs", ".json");
-
-  for (auto file : files) {
-    std::string path = file;
-    std::string file_name = path.substr(path.find_last_of("/\\") + 1);
-    file_name = file_name.substr(0, file_name.find_last_of("."));
-    Logger::log("Loading prefab: " + file_name);
-
-    std::string json = Reader::get_file_contents(file);
-    if (json.empty()) {
-      Logger::error("Failed to read prefab: " + file);
-      continue;
-    }
-
-    auto prefab = nlohmann::json::parse(json);
-
-    // loop through all the keys in the json array
-    // get all of the values from the json and try to create an Sprite from it
-    for (auto &[key, value] : prefab.items()) {
-      try {
-        auto name = value["name"].get<std::string>();
-        auto dst_x = value["atlas_pos_x"].get<float>();
-        auto dst_y = value["atlas_pos_y"].get<float>();
-        auto wid = value["sprite_size_x"].get<int>();
-        auto hei = value["sprite_size_y"].get<int>();
-        auto col_wid = value["collision_box_x"].get<int>();
-        auto col_hei = value["collision_box_y"].get<int>();
-        auto col_x = value["collision_offset_x"].get<int>();
-        auto col_y = value["collision_offset_y"].get<int>();
-        auto offset_x = value["sprite_offset_x"].get<int>();
-        auto offset_y = value["sprite_offset_y"].get<int>();
-        auto file_name = value["atlas_name"].get<std::string>();
-
-        auto spr = Sprite();
-        spr.sheet = file_name;
-        spr.dst_x = dst_x;
-        spr.dst_y = dst_y;
-        spr.col_wid = col_wid;
-        spr.col_hei = col_hei;
-        spr.col_x = col_x;
-        spr.col_y = col_y;
-        spr.wid = wid;
-        spr.hei = hei;
-        spr.spr_x = offset_x;
-        spr.spr_y = offset_y;
-
-        auto prefab = Prefab();
-        prefab.name = name;
-        prefab.components.clear();
-        auto components = value["components"].get<std::vector<nlohmann::json>>();
-        prefab.components.reserve(components.size());
-        for (auto &component : components) {
-          auto component_name = component["name"].get<std::string>();
-          auto component_active = component["is_active"].get<bool>();
-          if(!component_active){
-            continue;
-          }
-          auto component_data = ComponentData();
-          component_data.name = component_name;
-          component_data.active = true;
-          auto variables =
-              component["variables"].get<std::vector<nlohmann::json>>();
-          component_data.variables.reserve(variables.size());
-          for (auto &variable : variables) {
-            auto variable_name = variable["name"].get<std::string>();
-            auto variable_type = variable["type"].get<std::string>();
-            auto variable_val = variable["val"].get<std::string>();
-            VariableData var;
-            var.name = variable_name;
-            var.type = variable_type;
-            var.val = variable_val;
-            component_data.variables.push_back(var);
-          }
-          prefab.components.push_back(component_data);
-        }
-
-
-        m_sprites.insert(std::make_pair(name, spr));
-        m_prefabs.insert(std::make_pair(name, prefab));
-
-
-        Logger::log("Prefab loaded: " + name);
-      } catch (nlohmann::json::exception &e) {
-        Logger::error("Failed to load prefab: " + file + " " + e.what());
-      }
-    }
-    // m_prefabs.insert(std::make_pair(file_name, file));
-  }
-}
-
-void Res::load_animations(){
+void Res::load_animations() {
   auto files = Reader::get_extension_files("res/animations", ".json");
 
   for (auto file : files) {
@@ -365,15 +317,16 @@ void Res::load_animations(){
     auto prefab = nlohmann::json::parse(json);
 
     // loop through all the keys in the json array
-    // get all of the values from the json and try to create an Animation from it
+    // get all of the values from the json and try to create an Animation from
+    // it
     for (auto &[key, value] : prefab.items()) {
       try {
         auto name = value["name"].get<std::string>();
 
-
-        std::vector<nlohmann::json> animations = value["animations"].get<std::vector<nlohmann::json>>();
-        //load animations array 
-        for(auto &anim : animations){
+        std::vector<nlohmann::json> animations =
+            value["animations"].get<std::vector<nlohmann::json>>();
+        // load animations array
+        for (auto &anim : animations) {
           auto anim_name = anim["name"].get<std::string>();
           auto frames = anim["frames"].get<int>();
           auto x = anim["x"].get<int>();
@@ -384,12 +337,12 @@ void Res::load_animations(){
           Logger::log("Loading animation: " + anim_name);
           Logger::log("Frames: " + std::to_string(frames));
 
-          SpriteFrame frame = {anim_name,0,0, x, y, 0, frames, .16f, loop, block_transition, nullptr};
+          SpriteFrame frame = {anim_name, 0,      0,    x,    y,
+                               0,         frames, .16f, loop, block_transition,
+                               nullptr};
 
           m_animations.insert(std::make_pair(anim_name, frame));
         }
-
-        
 
         Logger::log("Animation loaded: " + name);
       } catch (nlohmann::json::exception &e) {
