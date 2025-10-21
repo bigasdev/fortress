@@ -17,11 +17,23 @@ void Renderer::init_shader(std::vector<std::string> shaders) {}
 
 void Renderer::draw_rect(Rect rect, Col color, bool fill) {
   if (!fill) {
+    // aditive mode
     GPU_Rectangle(m_gpu, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h,
                   {color.r, color.g, color.b, color.a});
   } else {
     GPU_RectangleFilled(m_gpu, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h,
                         {color.r, color.g, color.b, color.a});
+  }
+  m_calls++;
+}
+
+void Renderer::draw_circle(vec2 pos, int radius, Col color, bool fill) {
+  if (!fill) {
+    GPU_Circle(m_gpu, pos.x, pos.y, radius,
+               {color.r, color.g, color.b, color.a});
+  } else {
+    GPU_CircleFilled(m_gpu, pos.x, pos.y, radius,
+                     {color.r, color.g, color.b, color.a});
   }
   m_calls++;
 }
@@ -110,13 +122,45 @@ void Renderer::draw(GPU_Image *sheet, Sprite spr, vec2 pos) {
   dst.w = spr.wid * g_camera->get_game_scale() * spr.scale_x * spr.squash_x;
   dst.h = spr.hei * g_camera->get_game_scale() * spr.scale_y * spr.squash_y;
 
-  Logger::log("Drawing sprite: " + spr.sheet +
-              " at pos: " + std::to_string(dst.x) + ", " +
-              std::to_string(dst.y) + " with size: " + std::to_string(dst.w) +
-              ", " + std::to_string(dst.h));
-
   GPU_FlipEnum flip = spr.dir == -1 ? GPU_FLIP_HORIZONTAL : GPU_FLIP_NONE;
 
-  GPU_BlitRectX(sheet, &src, m_gpu, &dst, spr.angle, 0, 0, flip);
+  GPU_BlitRectX(sheet, &src, m_gpu, &dst, spr.angle, spr.pivot_x, spr.pivot_y,
+                flip);
+  m_calls++;
+}
+
+void Renderer::draw_additive(std::string name, vec2 pos) {
+  // TODO: check this later to not have to load every time
+  //  maybe switch the ownership to the system that will call it
+  //  or maybe a map from commons lights
+  auto texture = g_res->get_asset_texture(name);
+  if (!texture) {
+    Logger::error("Failed to get asset texture: " + name);
+    return;
+  }
+
+  GPU_SetBlendMode(*texture, GPU_BLEND_ADD);
+  GPU_SetRGBA(*texture, 255, 255, 255, 40);
+  draw_asset(*texture, pos);
+}
+
+void Renderer::draw_asset(GPU_Image *sheet, vec2 pos, float angle, int pivot_x,
+                          int pivot_y, int dir) {
+  GPU_Rect src;
+  src.x = 0;
+  src.y = 0;
+  src.w = sheet->w;
+  src.h = sheet->h;
+
+  GPU_Rect dst;
+  dst.x = static_cast<int>(pos.x);
+  dst.y = static_cast<int>(pos.y);
+  // the zoom is the key..
+  dst.w = src.w * g_camera->get_game_scale();
+  dst.h = src.h * g_camera->get_game_scale();
+
+  GPU_FlipEnum flip = dir == -1 ? GPU_FLIP_HORIZONTAL : GPU_FLIP_NONE;
+
+  GPU_BlitRectX(sheet, &src, m_gpu, &dst, angle, pivot_x, pivot_y, flip);
   m_calls++;
 }

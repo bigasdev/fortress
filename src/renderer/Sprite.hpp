@@ -6,20 +6,6 @@
 #include <string>
 #include <vector>
 
-// the sprite frame will assigned to the dst_x and dst_y variables of the sprite
-struct SpriteFrame {
-  std::string name = "default";
-  int orig_x = 0, orig_y = 0;
-  int x, y;
-  int frame = 0;
-  int max_frames;
-  float frame_timer = 0.16f;
-  bool loop = true;
-  bool block_transition = false;
-
-  bool *state = nullptr;
-};
-
 struct Sprite {
   // positions
 
@@ -47,6 +33,8 @@ struct Sprite {
   int dir = 1;
   int alpha = 255;
   bool visible = true;
+  int pivot_x = 0;
+  int pivot_y = 0;
 
   // shaders
   bool has_shader = false;
@@ -62,12 +50,10 @@ public:
   ~SpriteAnimator();
 
   void update(double dt);
-  void register_anim(SpriteFrame frame);
+  void register_anim();
 
 private:
   Sprite *m_spr;
-  std::vector<SpriteFrame> m_frames;
-  SpriteFrame m_current_frame;
   float m_timer = 0;
   bool m_playing = false;
 };

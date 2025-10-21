@@ -19,7 +19,6 @@ struct Line {
   Line(int x1, int y1, int x2, int y2) : x1(x1), y1(y1), x2(x2), y2(y2) {}
 };
 
-
 struct vec2 {
   float x, y;
 
@@ -47,19 +46,19 @@ struct vec2 {
 struct vec3 {
   float x, y, z;
 };
-//primitive color, its used to get 0 to 1 rgb values.
-struct PCol{
+// primitive color, its used to get 0 to 1 rgb values.
+struct PCol {
   float r, g, b;
 };
 
-#define RED PCol{1,0,0}
-#define GREEN PCol{0,1,0}
-#define BLUE PCol{0,0,1}
-#define WHITE PCol{1,1,1}
-#define BLACK PCol{0,0,0}
-#define YELLOW PCol{1,1,0}
-#define CYAN PCol{0,1,1}
-#define MAGENTA PCol{1,0,1}
+#define RED PCol{1, 0, 0}
+#define GREEN PCol{0, 1, 0}
+#define BLUE PCol{0, 0, 1}
+#define WHITE PCol{1, 1, 1}
+#define BLACK PCol{0, 0, 0}
+#define YELLOW PCol{1, 1, 0}
+#define CYAN PCol{0, 1, 1}
+#define MAGENTA PCol{1, 0, 1}
 
 struct Col {
   Uint8 r, g, b, a;

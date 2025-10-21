@@ -1,0 +1,183 @@
+{
+    "data": [
+        {
+            "folder": "entity",
+            "name": "orc_rogue",
+            "params": [
+                {
+                    "name": "pos_x",
+                    "type": "float",
+                    "value": 50.0
+                },
+                {
+                    "name": "pos_y",
+                    "type": "float",
+                    "value": 25.0
+                },
+                {
+                    "name": "health",
+                    "type": "int",
+                    "value": 20
+                },
+                {
+                    "name": "offset_x",
+                    "type": "int",
+                    "value": -18
+                },
+                {
+                    "name": "offset_y",
+                    "type": "int",
+                    "value": -48
+                }
+            ],
+            "sprite": {
+                "name": "orc_rogue",
+                "pallete": "mockup"
+            }
+        },
+        {
+            "folder": "bullets",
+            "name": "axe",
+            "params": [
+                {
+                    "name": "speed",
+                    "type": "float",
+                    "value": 150.0
+                }
+            ],
+            "sprite": {
+                "name": "wooden_dagger",
+                "pallete": "mockup"
+            }
+        },
+        {
+            "folder": "entity",
+            "name": "silver_vein",
+            "params": [
+                {
+                    "name": "health",
+                    "type": "int",
+                    "value": 30
+                },
+                {
+                    "name": "offset_x",
+                    "type": "int",
+                    "value": -14
+                },
+                {
+                    "name": "offset_y",
+                    "type": "int",
+                    "value": -32
+                },
+                {
+                    "name": "drop_amount",
+                    "type": "int",
+                    "value": 2
+                },
+                {
+                    "name": "drop",
+                    "type": "string",
+                    "value": "items/silver_ore"
+                }
+            ],
+            "sprite": {
+                "name": "ore",
+                "pallete": "mockup"
+            }
+        },
+        {
+            "folder": "items",
+            "name": "axe_old",
+            "sprite": {
+                "name": "axe_new",
+                "pallete": "mockup"
+            }
+        },
+        {
+            "folder": "hello",
+            "name": "entity",
+            "params": [
+                {
+                    "name": "yesss",
+                    "type": "int",
+                    "value": 5
+                }
+            ],
+            "sprite": {
+                "name": "axe",
+                "pallete": "mockup"
+            }
+        },
+        {
+            "folder": "seeds",
+            "name": "herb",
+            "params": [
+                {
+                    "name": "type",
+                    "type": "string",
+                    "value": "herb"
+                }
+            ],
+            "sprite": {
+                "name": "herb",
+                "pallete": "farming"
+            }
+        },
+        {
+            "folder": "items",
+            "name": "wooden_dagger",
+            "sprite": {
+                "name": "wooden_dagger",
+                "pallete": "mockup"
+            }
+        },
+        {
+            "folder": "seeds",
+            "name": "cherry",
+            "params": [
+                {
+                    "name": "type",
+                    "type": "string",
+                    "value": "fruit"
+                }
+            ],
+            "sprite": {
+                "name": "cherry",
+                "pallete": "farming"
+            }
+        },
+        {
+            "folder": "seeds",
+            "name": "lily",
+            "params": [
+                {
+                    "name": "type",
+                    "type": "string",
+                    "value": "plant"
+                }
+            ],
+            "sprite": {
+                "name": "lily",
+                "pallete": "farming"
+            }
+        },
+        {
+            "folder": "items",
+            "name": "silver_ore",
+            "sprite": {
+                "name": "silver_ore",
+                "pallete": "mockup"
+            }
+        }
+    ],
+    "folders": [
+        "hello",
+        "items",
+        "bullets",
+        "seeds",
+        "entity"
+    ],
+    "open_items": [
+        "silver_vein"
+    ]
+}

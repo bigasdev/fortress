@@ -56,17 +56,17 @@ void Engine::init() {
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
-  //get computer resolution 
+  // get computer resolution
   SDL_DisplayMode DM;
   SDL_GetCurrentDisplayMode(0, &DM);
 
   SDL_WindowFlags window_flags =
       (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI |
                         SDL_WINDOW_RESIZABLE);
-  m_sdl_window = SDL_CreateWindow("Game",DM.w - (WIN_WIDTH*1.1f) , DM.h - (WIN_HEIGHT*1.1f),
-                                  WIN_WIDTH, WIN_HEIGHT, window_flags);
+  m_sdl_window = SDL_CreateWindow("Game", DM.w - (WIN_WIDTH * 1.1f),
+                                  DM.h - (WIN_HEIGHT * 1.1f), WIN_WIDTH,
+                                  WIN_HEIGHT, window_flags);
   m_window_size = {WIN_WIDTH, WIN_HEIGHT};
-
 
   GPU_SetInitWindow(SDL_GetWindowID(m_sdl_window));
 
@@ -107,40 +107,71 @@ void Engine::init() {
   m_running = true;
 }
 
-void Engine::post_init() {
-  if (m_loaded) {
-    return;
-  }
+void Engine::post_init() {}
 
-  m_profiler = new Profiler();
-  m_renderer = new Renderer(m_gpu);
-  m_sound_manager = new SoundManager();
-  m_input_manager = new InputManager();
-  g_sound_manager = m_sound_manager;
-  g_input_manager = m_input_manager;
-
-  m_res = new Res(m_sdl_renderer);
-  m_res->init();
-
-  m_renderer->init_shader(m_res->get_shaders());
-
-  g_engine = this;
-  g_res = m_res;
-  g_renderer = m_renderer;
-
-  // starting game
-  m_game = new Game();
-  m_game->init();
-
-  Logger::log("Game initialized");
-
+void Engine::load_step() {
+  switch (m_load_state) {
+  case LoadState::PROFILER:
+    m_profiler = new Profiler();
+    Logger::log("Profiler initialized");
+    m_load_state = LoadState::RENDERER;
+    m_load_progress += 5.0f;
+    break;
+  case LoadState::RENDERER:
+    m_renderer = new Renderer(m_gpu);
+    m_load_state = LoadState::SOUND;
+    Logger::log("Renderer initialized");
+    m_load_progress += 10.0f;
+    break;
+  case LoadState::SOUND:
+    m_sound_manager = new SoundManager();
+    g_sound_manager = m_sound_manager;
+    m_load_state = LoadState::INPUT;
+    Logger::log("Sound manager initialized");
+    m_load_progress += 5.0f;
+    ;
+    break;
+  case LoadState::INPUT:
+    m_input_manager = new InputManager();
+    g_input_manager = m_input_manager;
+    m_load_state = LoadState::RESOURCES;
+    Logger::log("Input manager initialized");
+    m_load_progress += 5.0f;
+    break;
+  case LoadState::RESOURCES:
+    m_res = new Res(m_sdl_renderer);
+    m_res->init();
+    g_engine = this;
+    g_res = m_res;
+    g_renderer = m_renderer;
+    m_load_state = LoadState::INIT_SHADER;
+    Logger::log("Resources initialized");
+    m_load_progress += 50.0f;
+    break;
+  case LoadState::INIT_SHADER:
+    // initializing shaders after resources are loaded
+    m_renderer->init_shader(m_res->get_shaders());
+    m_load_state = LoadState::START_GAME;
+    Logger::log("Shaders initialized");
+    m_load_progress += 5.0f;
+    break;
+  case LoadState::START_GAME:
+    // starting game
+    m_game = new Game();
+    m_game->init();
+    Logger::log("Game initialized");
+    m_load_state = LoadState::START_IMGUI;
+    m_load_progress += 20.0f;
+    break;
+  case LoadState::START_IMGUI:
 #if _IMGUI
-  SDL_GLContext &gl_context = m_gpu->context->context;
-  GUI::setup(m_sdl_window, gl_context);
+    SDL_GLContext &gl_context = m_gpu->context->context;
+    GUI::setup(m_sdl_window, gl_context);
 #endif
-
-  Logger::log("Engine post init");
-  m_loaded = true;
+    Logger::log("Engine post init");
+    m_loaded = true;
+    break;
+  }
 }
 
 bool m_moving = false;
@@ -194,9 +225,11 @@ void Engine::fixed_update() {
 
 void Engine::update() {
   if (!m_loaded) {
+    load_step();
     return;
   }
 
+  g_input_manager->tick_update();
   m_game->update(Timer::get_dt());
 }
 
@@ -215,14 +248,49 @@ void Engine::post_update() {
 }
 
 void Engine::draw() {
+  GPU_Clear(m_gpu);
   if (!m_loaded) {
+    GPU_SetCamera(m_gpu, nullptr);
+    // loading screen will be here
+    std::cout << "Loading... " << m_load_progress << "%\n";
+    Rect rect;
+    Col col = {255, 0, 0, 255};
+    rect.x = m_window_size.x / 4;
+    rect.y = m_window_size.y / 2 - 10;
+    rect.w = (m_window_size.x / 2) * (m_load_progress / 100.0f);
+    rect.h = 20;
+
+    GPU_RectangleFilled(m_gpu, rect.x, rect.y, rect.x + rect.w, rect.y + rect.h,
+                        {col.r, col.g, col.b, col.a});
+
+    GPU_Flip(m_gpu);
     return;
   }
 
-  GPU_Clear(m_gpu);
   GPU_SetCamera(m_gpu, *g_camera->get_gpu_cam());
+
   m_game->draw_root();
   m_game->draw_ent();
+
+  // TODO: lightning system
+  // if uses lightning
+  if (true) {
+    Rect quad;
+    quad.x = g_camera->get_pos().x;
+    quad.y = g_camera->get_pos().y;
+    quad.w = m_window_size.x;
+    quad.h = m_window_size.y;
+    Col col = {1, 1, 20, 90};
+    auto light_falloff = Math::max(g_light_falloff, 1.0f);
+    col.a = 100 * light_falloff;
+    m_renderer->draw_rect(quad, col, true);
+
+    // for each light point, just pseudo code to think on what i need
+    //  for (auto light : lights) {
+    g_renderer->draw_additive("light_test", vec2{100, 100});
+    g_renderer->draw_additive("light_test2", vec2{100, 100});
+  }
+
   // game draw
   GPU_SetCamera(m_gpu, nullptr);
   m_game->draw_ui();
@@ -231,11 +299,12 @@ void Engine::draw() {
 #if _DEBUG
   GPU_SetCamera(m_gpu, nullptr);
   m_profiler->draw();
-#endif
 
 #if _IMGUI
   GPU_FlushBlitBuffer();
   GUI::draw([&]() {});
+#endif
+
 #endif
 
   GPU_Flip(m_gpu);

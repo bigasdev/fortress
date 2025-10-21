@@ -6,5 +6,117 @@
         "width": 8,
         "x": 0,
         "y": 5
+    },
+    {
+        "height": 16,
+        "name": "bigas",
+        "palette": "mockup",
+        "width": 16,
+        "x": 0,
+        "y": 0
+    },
+    {
+        "height": 16,
+        "name": "axe",
+        "palette": "mockup",
+        "width": 16,
+        "x": 0,
+        "y": 2
+    },
+    {
+        "height": 8,
+        "name": "projectile",
+        "palette": "mockup",
+        "width": 8,
+        "x": 0,
+        "y": 7
+    },
+    {
+        "height": 16,
+        "name": "bigas_new",
+        "palette": "mockup",
+        "width": 16,
+        "x": 1,
+        "y": 0
+    },
+    {
+        "height": 16,
+        "name": "axe_new",
+        "palette": "mockup",
+        "width": 16,
+        "x": 3,
+        "y": 2
+    },
+    {
+        "height": 32,
+        "name": "orc_mage",
+        "palette": "mockup",
+        "width": 32,
+        "x": 1,
+        "y": 0
+    },
+    {
+        "height": 16,
+        "name": "crop",
+        "palette": "farming",
+        "width": 16,
+        "x": 0,
+        "y": 0
+    },
+    {
+        "height": 16,
+        "name": "cherry",
+        "palette": "farming",
+        "width": 16,
+        "x": 12,
+        "y": 2
+    },
+    {
+        "height": 16,
+        "name": "wooden_dagger",
+        "palette": "mockup",
+        "width": 16,
+        "x": 8,
+        "y": 1
+    },
+    {
+        "height": 16,
+        "name": "lily",
+        "palette": "farming",
+        "width": 16,
+        "x": 12,
+        "y": 3
+    },
+    {
+        "height": 16,
+        "name": "herb",
+        "palette": "farming",
+        "width": 16,
+        "x": 12,
+        "y": 4
+    },
+    {
+        "height": 32,
+        "name": "orc_rogue",
+        "palette": "mockup",
+        "width": 32,
+        "x": 2,
+        "y": 0
+    },
+    {
+        "height": 32,
+        "name": "ore",
+        "palette": "mockup",
+        "width": 32,
+        "x": 0,
+        "y": 1
+    },
+    {
+        "height": 16,
+        "name": "silver_ore",
+        "palette": "mockup",
+        "width": 16,
+        "x": 5,
+        "y": 3
     }
 ]

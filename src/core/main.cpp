@@ -10,10 +10,10 @@ targetting it to the corect platform
 #include "emscripten.h"
 #endif
 
+#include "../tools/Logger.hpp"
 #include "Assert.hpp"
 #include "Engine.hpp"
 #include "Timer.hpp"
-#include "../tools/Logger.hpp"
 #include <iostream>
 #include <memory>
 
@@ -28,11 +28,11 @@ void loop() {
 #ifdef __EMSCRIPTEN__
   // mainloop
 #elif __WIN32__
-  //dt calculation is always done at the start of the frame
+  // dt calculation is always done at the start of the frame
   Timer::update();
   engine->input();
 
-  //fixed delta time loop
+  // fixed delta time loop
   while (Timer::get_accumulator() >= Timer::get_tmod()) {
     Timer::fixed_t();
     engine->fixed_update();
@@ -54,7 +54,7 @@ int main(int args, char *argv[]) {
 #ifdef __EMSCRIPTEN__
   emscripten_set_main_loop(loop, 0, 1);
 #else
-  while(engine->is_running()) {
+  while (engine->is_running()) {
     loop();
   }
 #endif

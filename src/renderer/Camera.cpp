@@ -19,6 +19,7 @@ Camera::Camera(vec2 *size) : m_size(size) {
   Logger::log("Game:" + std::to_string(GAME_SCALE));
 
   m_game_scale = GAME_SCALE;
+  tracking_speed = 20.f;
 
   Logger::log(std::to_string(m_game_scale));
 }
@@ -27,9 +28,7 @@ GPU_Camera **Camera::get_gpu_cam() { return &m_camera; }
 
 Camera::~Camera() { delete m_camera; }
 
-vec2 Camera::get_pos() {
-  return vec2(m_camera->x, m_camera->y);
-}
+vec2 Camera::get_pos() { return vec2(m_camera->x, m_camera->y); }
 
 void Camera::move() {
   if (m_tracked_pos != nullptr) {
@@ -60,7 +59,8 @@ void Camera::move() {
 
 void Camera::update() {
   if (m_tracked_pos != nullptr) {
-    if (Math::fabs(m_pos.x - last_pos.x) >= 1.f || Math::fabs(m_pos.y - last_pos.y) >= 1.f) {
+    if (Math::fabs(m_pos.x - last_pos.x) >= 1.f ||
+        Math::fabs(m_pos.y - last_pos.y) >= 1.f) {
       dirty = true;
     }
   }

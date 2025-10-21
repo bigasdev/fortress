@@ -1,7 +1,8 @@
-#pragma once 
+#pragma once
 
 /*
-   Here is where all the game logic will be, the goal is to never touch the Engine code, just use this one to manage the game.
+   Here is where all the game logic will be, the goal is to never touch the
+   Engine code, just use this one to manage the game.
  */
 
 #ifndef GAME_HPP
@@ -10,7 +11,7 @@
 class Camera;
 class Cooldown;
 
-class Game{
+class Game {
 public:
   Game();
   ~Game();
@@ -23,8 +24,8 @@ public:
   void draw_ent();
   void draw_ui();
   void clean();
-private:
 
+private:
   Camera *m_camera;
   Cooldown *m_cooldown;
 };
