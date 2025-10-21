@@ -18,7 +18,7 @@ GAME_FLAGS = -D_IMGUI -DWIN_WIDTH=1024 -DWIN_HEIGHT=768 -DGAME_SCALE=3
 bin_dir:
 	mkdir bin
 
-SYSTEMS_DIRS := src/systems/health src/systems/physics src/systems/farming src/systems/farming/popup src/systems/collision src/systems/player src/systems/weapon src/systems/sprite
+SYSTEMS_DIRS := src/systems/health src/systems/physics src/systems/collision src/systems/player src/systems/weapon src/systems/sprite
 
 SRC_DIRS := $(SYSTEMS_DIRS) src/imgui src/core src/core/ui src/messages src/components src/systems src/entity src/entity/ui src/renderer src/res src/game src/tools
 

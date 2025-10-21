@@ -10,8 +10,6 @@
 #include "components/WeaponComponent.hpp"
 #include "entities/Entity.hpp"
 #include "systems/collision/CollisionSystem.hpp"
-#include "systems/farming/FarmingSystem.hpp"
-#include "systems/farming/popup/FarmingPopup.hpp"
 #include "systems/health/HealthManagementSystem.hpp"
 #include "systems/physics/PhysicsSystem.hpp"
 #include "systems/player/PlayerAttackSystem.hpp"

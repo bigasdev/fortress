@@ -33,14 +33,9 @@ std::unique_ptr<CollisionSystem> m_collision_system =
     std::make_unique<CollisionSystem>();
 std::unique_ptr<PlayerAttackSystem> m_player_attack_system =
     std::make_unique<PlayerAttackSystem>();
-std::unique_ptr<FarmingSystem> m_farming_system =
-    std::make_unique<FarmingSystem>();
-std::unique_ptr<FarmingPopup> m_farming_popup =
-    std::make_unique<FarmingPopup>();
 std::unique_ptr<HealthManagementSystem> m_health_system =
     std::make_unique<HealthManagementSystem>();
 
-// Test spawning stuff
 std::unique_ptr<EntityFactory> m_entity_factory =
     std::make_unique<EntityFactory>();
 
@@ -61,14 +56,17 @@ void Game::init() {
 
   g_cooldown = m_cooldown;
   g_camera = m_camera;
+
+  // entity factory is where all the entities skeletons shuld be defined
+  // makes the systems/games cleaner and easier to manage different types of
+  // instantatiations
   g_entity_factory = m_entity_factory.get();
 
-  // FIX:: ECS TEST
+  // the game manager holds the world
   g_game_manager = new GameManager();
 
+  // registering all the systems, order matters
   std::vector<Flag::ISystem *> m_systems = {};
-  m_systems.push_back(m_farming_system.get());
-  m_systems.push_back(m_farming_popup.get());
   m_systems.push_back(m_sprite_system.get());
   m_systems.push_back(m_animated_sprite_system.get());
   m_systems.push_back(m_physics_system.get());
@@ -81,9 +79,6 @@ void Game::init() {
   m_systems.push_back(m_health_system.get());
 
   m_world = std::make_unique<Flag::World>(m_systems);
-  // FIX: just disabling the farming popup for now,
-  //  change World later to disable it automatically on start
-  m_world->disable_system(1);
 
   g_game_manager->main_world = m_world.get();
 #if _DEBUG
@@ -91,94 +86,21 @@ void Game::init() {
 #endif
   m_world->start();
 
-  // starting partitional grid
-  // TODO: later change to a separated system
-  m_world->spatial_grid.reset(50, 24 * g_camera->get_game_scale());
-
-  auto player_components = std::vector<std::shared_ptr<Flag::IComponent>>{};
-
-  auto hero_transform = std::make_shared<TransformComponent>();
-  hero_transform->pos = {100, 100};
-  if (save_data) {
-    hero_transform->pos = save_data->hero_pos;
-  }
-  hero_transform->scale = vec2{1, 1};
-
-  auto hero_collider = std::make_shared<CollisionBoxComponent>();
-  hero_collider->layer = ColLayers::PLAYER;
-  hero_collider->size = vec2{8, 10};
-  hero_collider->gizmo_color = {0, 255, 0, 100};
-
-  auto hero_player_move = std::make_shared<PlayerMoveComponent>();
-  hero_player_move->speed = 100.0f;
-
-  auto hero_anim_spr = std::make_shared<SpriteAnimatedComponent>();
-  auto hero_idle = g_res->get_animation("Bigas_Idle");
-  hero_anim_spr->offset = vec2{-12, -16};
-  hero_anim_spr->anims.insert(std::make_pair("idle", hero_idle));
-  hero_anim_spr->default_anim = hero_idle;
-  hero_anim_spr->current_anim = hero_idle;
-
-  player_components.push_back(hero_transform);
-  player_components.push_back(hero_collider);
-  player_components.push_back(hero_player_move);
-  player_components.push_back(hero_anim_spr);
-
-  auto player = new Flag::Entity(m_world.get(), player_components);
-
-  auto id = m_world->create_entity(player);
-  m_world->add_component(id, hero_transform);
-  m_world->add_component(id, hero_collider);
-  m_world->add_component(id, hero_player_move);
-  m_world->add_component(id, hero_anim_spr);
-
-  auto weapon_data = g_res->get_item(res::data::items_wooden_dagger);
-  auto sword_components = std::vector<std::shared_ptr<Flag::IComponent>>{};
-  auto sword_transform = std::make_shared<TransformComponent>();
-  sword_transform->pos = vec2{150, 100};
-  sword_transform->scale = vec2{1, 1};
-  sword_transform->pivot_x = 0;
-  sword_transform->pivot_y = 13;
-  auto sword_spr = std::make_shared<SpriteComponent>();
-  sword_spr->name = weapon_data.sprite;
-  auto sword_component = std::make_shared<WeaponComponent>();
-  sword_component->following = id;
-
-  sword_components.push_back(sword_transform);
-  sword_components.push_back(sword_spr);
-  sword_components.push_back(sword_component);
-  auto sword = new Flag::Entity(m_world.get(), sword_components);
-
-  auto sword_id = m_world->create_entity(sword);
-  m_world->add_component(sword_id, sword_transform);
-  m_world->add_component(sword_id, sword_spr);
-  m_world->add_component(sword_id, sword_component);
+  // TODO: hero spawn
+  g_entity_factory->spawn_hero();
 
   // spawning enemies
-  for (int i = 2; i < 2000; i++) {
+  for (int i = 2; i < 4; i++) {
+    // rnd engine
     auto rnd = Random::get<int>(0, 1);
     auto entity_type =
         rnd == 0 ? res::data::entity_orc_rogue : res::data::entity_silver_vein;
 
     auto pos = vec2{Random::get<float>(-50, 600), Random::get<float>(-96, 600)};
     m_entity_factory->spawn_entity(entity_type, pos);
-
-    auto orc_collider = std::make_shared<CollisionBoxComponent>();
-    orc_collider->layer = ColLayers::ENEMY;
-    orc_collider->size = vec2{19, 16};
-    orc_collider->gizmo_color = {55, 0, 255, 100};
-    // orc->add_component(orc_collider, 15);
-
-    // TODO: remember all of this logic for spatial grid will need to be
-    //  reworked + changed to a different spot/system later
-    auto grid_pos = pos;
-
-    g_game_manager->main_world->add_component(i, orc_collider);
-    g_game_manager->main_world->spatial_grid.add_entity(
-        i, Math::round(grid_pos.x), Math::round(grid_pos.y));
-
-    auto orc_test = g_game_manager->main_world->get_entity(i);
   }
+
+  // TODO: camera positioning/setting to hero
   g_camera->track_pos(&m_world->get_component<TransformComponent>(0)->pos);
 }
 
@@ -190,6 +112,8 @@ void Game::update(double dt) {
   m_world->update();
   m_world->destroy_pending_entities();
 
+  // debug pause + recording
+  // control + d its used to get a profiler in a .txt file
 #if _DEBUG
   if (g_input_manager->get_key_press(SDL_KeyCode::SDLK_TAB)) {
     if (g_game_manager->main_world->is_paused) {

@@ -12,40 +12,53 @@ Sound manager initialized
 No joysticks connected!
 
 Input manager initialized
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: 6px.ttf
 Font size: : 12
 Loading font: arial
 Loaded font: res/font\arial-12.TTF
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: arial.TTF
 Font size: : 12
 Loading font: blueterm
 Loaded font: res/font\blueterm-12.ttf
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: blueterm.ttf
 Font size: : 8
 Loading font: code
 Loaded font: res/font\code-8.ttf
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: code8.ttf
 Font size: : 8
 Loading font: fusion
 Loaded font: res/font\fusion-8.ttf
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: fusion10.ttf
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: fusion8px.ttf
 Font size: : 10
 Loading font: fusionbig
 Loaded font: res/font\fusionbig-10.ttf
 Font size: : 11
 Loading font: gohu
 Loaded font: res/font\gohu-11.ttf
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: gohu11.ttf
 Font size: : 11
 Loading font: gohufont
 Loaded font: res/font\gohufont-11.ttf
+Font size: : 14
+Loading font: gohufont
+Loaded font: res/font\gohufont-14.ttf
 Font size: : 14
 Loading font: gohufontbig
 Loaded font: res/font\gohufontbig-14.ttf
 Font size: : 12
 Loading font: jetbrains
 Loaded font: res/font\jetbrains-12.ttf
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: jetbrains.ttf
 ERROR: Font file name must contain size, e.g. fontname-16.ttf: Licence.txt
 Font size: : 8
 Loading font: NotJamChunkySans
 Loaded font: res/font\NotJamChunkySans-8.ttf
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: NotJamChunkySans.ttf
 Font size: : 10
 Loading font: pixolleta
 Loaded font: res/font\pixolleta-10.ttf
+ERROR: Font file name must contain size, e.g. fontname-16.ttf: pixolleta.ttf
 Font size: : 6
 Loading font: sixpx
 Loaded font: res/font\sixpx-6.ttf
@@ -122,80 +135,6 @@ Resources initialized
 Shaders initialized
 Game:3
 3
-Found seed: lily
-Type: plant
-Found seed: herb
-Type: herb
-Found seed: cherry
-Type: fruit
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-ERROR: Param drop not found in item orc_rogue
-Game initialized
-Engine post init
-CollisionSystem received a message
-Entity 13 took 10 damage. 20/30 HP left.
-CollisionSystem received a message
-Entity 13 collided with entity 80
-CollisionSystem received a message
-Entity 13 took 10 damage. 10/30 HP left.
-CollisionSystem received a message
-Entity 13 collided with entity 81
-CollisionSystem received a message
-Entity 13 took 10 damage. 0/30 HP left.
-CollisionSystem received a message
-Entity 13 collided with entity 82
-CollisionSystem received a message
-Entity 43 took 10 damage. 10/20 HP left.
-CollisionSystem received a message
-Entity 43 collided with entity 85
-CollisionSystem received a message
-Entity 52 took 10 damage. 20/30 HP left.
-CollisionSystem received a message
-Entity 52 collided with entity 86
-CollisionSystem received a message
-Entity 52 took 10 damage. 10/30 HP left.
-CollisionSystem received a message
-Entity 52 collided with entity 87
-CollisionSystem received a message
-Entity 43 took 10 damage. 0/20 HP left.
-CollisionSystem received a message
-Entity 43 collided with entity 88
-ERROR: Item coin not found!
-ERROR: Signal: 22
+Save loaded!
+Save loaded!
+ERROR: Signal: 4
