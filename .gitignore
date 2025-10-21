@@ -402,3 +402,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Fortress frameword
+imgui.ini
+log.txt
+report.txt
+crash_log.txt

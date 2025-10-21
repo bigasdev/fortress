@@ -1,11 +1,11 @@
 @echo off
 
-echo Workspace Directory: %cd%
+echo Workspace Directory: 
+cd ../
 
 mkdir bin
 mkdir .build
 mkdir .release
-mkdir .web
 
 xcopy "scripts_dlls\dev_dlls\SDL2.dll" ".build"
 xcopy "scripts_dlls\dev_dlls\SDL2_image.dll" ".build" /i
