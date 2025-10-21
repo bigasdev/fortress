@@ -1,0 +1,7 @@
+#include "{{CLASS_NAME}}.hpp"
+
+#include "core/GameManager.hpp"
+#include "core/InputManager.hpp"
+#include "core/global.hpp"
+#include "tools/Logger.hpp"
+#include "tools/Mouse.hpp"

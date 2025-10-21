@@ -1,0 +1,17 @@
+{
+    "data": {
+        "assets_resource_path": "res/",
+        "fixed_update_factor": "0.016600",
+        "game_debug": "true",
+        "game_fps": "60",
+        "game_fullscreen": "true",
+        "game_height": "356",
+        "game_scale": "3.000000",
+        "game_title": "test\u0000ess Eengin",
+        "game_width": "647",
+        "starting_world": "title_screen"
+    },
+    "file_name": "Game Profile",
+    "is_favorite": false,
+    "is_static": true
+}

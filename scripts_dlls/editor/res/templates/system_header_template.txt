@@ -1,0 +1,9 @@
+#pragma once
+#include "tools/Common.hpp"
+
+class {{CLASS_NAME}} : public
+{
+  public:
+    {{CLASS_NAME}}() = default;
+    ~{{CLASS_NAME}}() = default;
+};

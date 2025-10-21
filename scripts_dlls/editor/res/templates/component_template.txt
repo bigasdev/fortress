@@ -1,0 +1,9 @@
+#pragma once
+#include "../tools/Common.hpp"
+#include "components/IComponent.hpp"
+
+class {{CLASS_NAME}} : public Flag::IComponent
+{
+  public:
+    ~{{CLASS_NAME}}() = default;
+};
